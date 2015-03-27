@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 
 #CREATE TABLE quotes
 #(quote text, datetm text);
