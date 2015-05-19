@@ -76,4 +76,4 @@ def dbGet8ball():
 
 def dbGetMoment():
     c.execute("SELECT moment FROM moments ORDER BY RANDOM() LIMIT 1;")
-    return str(c.fetchone()[0])
+    return str(c.fetchone()[0]).encode("utf-8")
