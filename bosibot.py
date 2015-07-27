@@ -8,6 +8,7 @@ import random
 import urllib2
 import bitly_api
 import pywapi
+from wikipedia import summary
 from config import *
 from bosidb import *
 from BeautifulSoup import BeautifulSoup
@@ -133,6 +134,14 @@ if __name__ == '__main__':
                             # ======================
                             L = line[3:]
                             message = ' '.join(str(x) for x in L)
+
+                            # Detect any SWRX related keywords and warn for using
+                            # ===================================================
+                            if str.lower(L[0][1:]) in SWRXLIST:
+                                irc_send("SWRX Keyword Detected", ": " + "No mention of the sweatshop that is SWRX will be tolerated here.")
+                            for word in L[1:]:
+                                if str.lower(word) in SWRXLIST:
+                                    irc_send("SWRX Keyword Detected", ": " + "No mention of the sweatshop that is SWRX will be tolerated here.")
 
                             # Maintain SEEN Dictionary
                             # ========================
@@ -279,6 +288,19 @@ if __name__ == '__main__':
                                 elif (command == 'forecast' and len(line) > 4):
                                     yahooweather = pywapi.get_weather_from_yahoo(line[4], 'imperial')
                                     [irc_send((x['day']).encode('utf-8') + ' ' + (x['date']).encode('utf-8'), ': ' + (x['high']).encode('utf-8') + 'F/' + (x['low']).encode('utf-8') + 'F - ' + (x['text']).encode('utf-8')) for x in yahooweather['forecasts'][1:]]
+
+
+                                # @wiki <word> - Return wiki summary for term
+                                # ===========================================
+                                elif (command == 'wiki') and (len(line) > 4):
+                                    L = (line[4:])
+                                    temp_str = ' '.join(str.upper(x) for x in L)
+                                    if (len(temp_str) < 12):
+                                        try:
+                                            wiki = (summary(temp_str, sentences=1)).encode('utf-8')
+                                            irc_send(name, ": " + str(wiki))
+                                        except:
+                                            irc_send(name, ": Error retrieving wiki.")
 
                                 # @bitly - URL Shortener
                                 # ======================

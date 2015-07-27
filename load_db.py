@@ -1,5 +1,9 @@
 #!/usr/bin/python2
 
+import time
+
+time_string = time.strftime("%c")
+
 #CREATE TABLE quotes
 #(quote text, datetm text);
 
@@ -15,13 +19,11 @@ conn = sqlite3.connect('bosibot.db')
 conn.text_factory = str
 c = conn.cursor()
 
-c.execute("CREATE TABLE IF NOT EXISTS moments (moment text);")
-
 BALL = []
 
 def read_ball():
 
-    f = open('facts.txt', 'r')
+    f = open('quotes', 'r')
     for x in f.readlines():
         line = x.split('\n')
         BALL.append(line[0])
@@ -31,7 +33,7 @@ def read_ball():
 read_ball()
 
 for ball in BALL:
-    c.execute("INSERT INTO moments (moment) VALUES (?);", (ball,))
+    c.execute("INSERT INTO quotes (quote, datetm) VALUES (?,?);", (ball,time_string))
     print "added quote " + ball
 
 conn.commit()

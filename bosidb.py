@@ -4,7 +4,7 @@
 import sqlite3
 import time
 
-conn = sqlite3.connect('babbygrill.db')
+conn = sqlite3.connect('bosibot.db')
 c = conn.cursor()
 
 c.execute("CREATE TABLE IF NOT EXISTS quotes (quote text, datetm text);")
