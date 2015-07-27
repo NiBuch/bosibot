@@ -20,7 +20,10 @@ def dbAddTell(tonick, fromnick, message):
 
 def dbGetTell(nick):
     c.execute("SELECT fromnick, message, datetm FROM tell WHERE tonick = ?;", (nick,))
-    tells = [x.encode("utf-8") for x in c.fetchall()]
+    tells = []
+    for row in c.fetchall():
+        tell = [x.encode("utf-8") for x in row]
+        tells.append(tell)
     return tells
 
 def dbCleanTell(nick):
