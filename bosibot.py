@@ -86,26 +86,32 @@ if __name__ == '__main__':
           
     # Cards Against Humanity
     # ======================
-    CARDS = []
     def cards_against_humanity(text):
-        global CARDS
-        if not CARDS:
-            CARDS = urllib2.urlopen("http://www.cardsagainsthumanity.com/wcards.txt").read()
-            CARDS = CARDS.split("cards=")[1]
-            CARDS = re.split("[.?]?<>", CARDS)
+        def random_cards_against_humanity():
+            global CARDS
 
-        text = text[1:].split()
-        for ind,word in enumerate(text):
-            if "_" in word:
-                card = random.choice(CARDS)
-                if (" " in card) and ("™" not in card):
-                    card = card.split()
-                    if (ind != 0 and card[0][0].isupper() and not card[1][0].isupper()):
-                        card[0] = card[0].lower()
-                    card = " ".join(card)
-                text[ind] = card
+            if not 'CARDS' in globals() or not CARDS:
+                CARDS = urllib2.urlopen("http://www.cardsagainsthumanity.com/wcards.txt").read()
+                CARDS = CARDS.split("cards=")[1]
+                CARDS = re.split("[.?]?<>", CARDS)
 
-        text = " ".join(text)
+            return random.choice(CARDS)
+
+        def replace_underscore_with_card(match):
+            card = random_cards_against_humanity()
+
+            if (" " in card) and ("™" not in card):
+                card = card.split()
+
+                # If this is not the first word, if first word is upper, but doesn't continue uppercase..
+                if len(match.group(0)) != 0 and card[0][0].isupper() and not card[1][0].isupper():
+                    card[0] = card[0].lower()
+
+                card = " ".join(card)
+
+            return match.group(1) + card + match.group(3)
+
+        text = re.sub('(^|\W)(_+)($|\W)', replace_underscore_with_card, text[1:])
 
         while len(text) > 350:
             irc_send("", text[:text.index(" ", 350)])
@@ -191,7 +197,7 @@ if __name__ == '__main__':
 
                             # Cards Against Humanity
                             # ======================
-                            elif re.search("(^|\s)_+($|\s)", message):
+                            elif re.search("(^|\W)(_+)($|\W)", message):
                                 try:
                                     cards_against_humanity(message)
                                 except:
