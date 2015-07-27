@@ -94,7 +94,7 @@ if __name__ == '__main__':
             CARDS = CARDS.split("cards=")[1]
             CARDS = re.split("[.?]?<>", CARDS)
 
-        text = text.split()
+        text = text[1:].split()
         for ind,word in enumerate(text):
             if "_" in word:
                 card = random.choice(CARDS)
