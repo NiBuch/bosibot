@@ -83,36 +83,7 @@ if __name__ == '__main__':
             irc_send("", text[350 + i:])
         else:
             irc_send("", "Hey " + nick + " " + opening[num] + text)
-          
-    # Cards Against Humanity
-    # ======================
-    CARDS = []
-    def cards_against_humanity(text):
-        global CARDS
-        if not CARDS:
-            CARDS = urllib2.urlopen("http://www.cardsagainsthumanity.com/wcards.txt").read()
-            CARDS = CARDS.split("cards=")[1]
-            CARDS = re.split("[.?]?<>", CARDS)
-
-        text = text.split()
-        for ind,word in enumerate(text):
-            if "_" in word:
-                card = random.choice(CARDS)
-                if (" " in card) and ("™" not in card):
-                    card = card.split()
-                    if (ind != 0 and card[0][0].isupper() and not card[1][0].isupper()):
-                        card[0] = card[0].lower()
-                    card = " ".join(card)
-                text[ind] = card
-
-        text = " ".join(text)
-
-        while len(text) > 350:
-            irc_send("", text[:text.index(" ", 350)])
-            text = text[text.index(" ",350):]
-        irc_send("", text)
-
-
+                
 
     # Main Loop
     # =========
@@ -186,14 +157,6 @@ if __name__ == '__main__':
                                         title = str(page.title.string).strip()
                                         if (title and (len(title) < 100)):
                                             irc_send("", title)
-                                except:
-                                    pass
-
-                            # Cards Against Humanity
-                            # ======================
-                            elif re.search("(^|\s)_+($|\s)", message):
-                                try:
-                                    cards_against_humanity(message)
                                 except:
                                     pass
 
