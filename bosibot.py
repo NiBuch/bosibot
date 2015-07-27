@@ -149,7 +149,7 @@ if __name__ == '__main__':
                         
                         # Build NAMES list
                         # ================
-                        if (line[3] == "=" and line[4] == CHANNEL):
+                        if (line[3] == CHANCHARACTER and line[4] == CHANNEL):
                             for nick in line[6:]:
                                 if nick[0] in ['@','+']:
                                     NAMES.append(nick[1:])
