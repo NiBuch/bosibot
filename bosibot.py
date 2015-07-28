@@ -109,9 +109,9 @@ if __name__ == '__main__':
 
                 card = " ".join(card)
 
-            return match.group(1) + card + match.group(3)
+            return match.group(1) + card
 
-        text = re.sub('(^|\W)(_+)($|\W)', replace_underscore_with_card, text[1:])
+        text = re.sub('(^|\W)(_+)(?=$|\W)', replace_underscore_with_card, text[1:])
 
         while len(text) > 350:
             irc_send("", text[:text.index(" ", 350)])
