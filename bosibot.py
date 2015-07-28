@@ -391,7 +391,7 @@ if __name__ == '__main__':
                                     elif raw_sql:
                                         irc_send(nick, ": was last seen in " + CHANNEL + " on " + raw_sql[1] + " - " + "<" + nick + "> " + raw_sql[0])
                                     else:
-                                        irc_send(nick, ": has not been seen in " + CHANNEL + ".")
+                                        irc_send(nick, ": has not said anything in " + CHANNEL + ".")
                                     
                     # Maintain NAMES list and tell
                     # ============================
